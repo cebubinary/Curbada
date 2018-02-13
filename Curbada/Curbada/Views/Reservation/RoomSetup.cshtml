@@ -1,0 +1,166 @@
+﻿
+@{
+    ViewBag.Title = "Room Setup";
+}
+
+@section scripts{
+    <script>
+        $(function() {
+            
+            var closebtn = $('<button/>', {
+                type:"button",
+                text: 'x',
+                id: 'close-preview',
+                style: 'font-size: initial;'
+            });
+            closebtn.attr("class", "close pull-right");
+            
+            $('#img-preview').popover({
+                trigger:'manual',
+                html:true,
+                title: "<strong>Preview</strong>"+$(closebtn)[0].outerHTML,
+                content: "There's no image",
+                placement:'bottom'
+            });
+
+            $('#img-preview-clear').click(function(){
+                $('#img-preview').attr("data-content","").popover('hide');
+                $('#img-preview-filename').val("");
+                $('#img-preview-clear').hide();
+                $('.image-preview-input input:file').val("");
+                $(".image-preview-input-title").text("Browse"); 
+            }); 
+
+            $(".image-preview-input input:file").change(function (){     
+                var img = $('<img/>', {
+                    id: 'dynamic',
+                    width:250,
+                    height:200
+                });      
+                var file = this.files[0];
+                var reader = new FileReader();
+                
+                reader.onload = function (e) {
+                    $(".image-preview-input-title").text("Change");
+                    $("#img-preview-clear").show();
+                    $("#img-preview-filename").val(file.name);            
+                    img.attr('src', e.target.result);
+                    $('#img-preview').attr("data-content", $(img)[0].outerHTML).popover("show");
+
+                    $('#close-preview').click(function () {
+                        $(this).closest('div').hide();
+                    });
+                }        
+                reader.readAsDataURL(file);
+            });  
+        });
+    </script>
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <input type="text" id="" class="form-control">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div id="div-book" class="form-group" align="right">
+                        <button type="button" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="div-result" class="form-group">
+                        <table id="table-result" class="table table-hover table-striped table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Room Name</th>
+                                    <th>Guest Name</th>
+                                    <th>Check-In Date</th>
+                                    <th>Check-Out Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Guest</td>
+                                    <td>02/14/2018</td>
+                                    <td>02/14/2018</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="setup-room-name">Name</label>
+                        <input class="form-control" id="setup-room-name" />
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label for="setup-room-capacity">Capacity</label>
+                        <input class="form-control" id="setup-room-capacity" />
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label for="setup-room-rate">Rate</label>
+                        <input class="form-control" id="setup-room-rate" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <fieldset class="group-border">
+                            <legend class="group-border">Pictures</legend>
+                            <div id="img-preview" class="input-group">
+                                <!-- don't give a name === doesn't send on POST/GET -->
+                                <input type="text" id="img-preview-filename" class="form-control" disabled="disabled">
+                                <span class="input-group-btn">
+
+                                    <button type="button" id="img-preview-clear" class="btn btn-default" style="display:none;">
+                                        <span class="glyphicon glyphicon-remove"></span> Clear
+                                    </button>
+
+                                    <div id="image-preview-input" class="btn btn-default image-preview-input">
+                                        <span class="glyphicon glyphicon-folder-open"></span>
+                                        <span class="image-preview-input-title">Browse</span>
+                                        <input type="file" accept="image/png, image/jpeg, image/gif" name="input-file-preview">
+                                    </div>
+                                </span>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="setup-update-notes">Notes</label>
+                        <textarea class="form-control" rows="5" id="setup-update-notes"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <div id="setup-clear" class="form-group" align="right">
+                            <button type="button" class="btn btn-warning">Clear</button>
+                            <button type="button" class="btn btn-success">Save</button>
+                            <button type="button" class="btn btn-danger">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

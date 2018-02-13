@@ -1,0 +1,222 @@
+﻿
+@{
+    ViewBag.Title = "Booking Details";
+}
+
+@section scripts{
+    <script>
+
+    </script>
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <fieldset class="group-border">
+                <legend class="group-border">Search</legend>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="check-in-date">Check-In Date</label>
+                            <div class="input-group date" data-provide="datepicker">
+                                <input type="text" id="check-in-date" class="form-control">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="check-out-date">Check-Out Date</label>
+                            <div class="input-group date" data-provide="datepicker">
+                                <input type="text" id="check-out-date" class="form-control">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <select id="room-type" class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <input type="text" id="" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div id="div-book" class="form-group" align="right">
+                            <button type="button" class="btn btn-primary">Search</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div id="div-result" class="form-group">
+                            <table id="table-result" class="table table-hover table-striped table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Room Name</th>
+                                        <th>Guest Name</th>
+                                        <th>Check-In Date</th>
+                                        <th>Check-Out Date</th>
+                                        <th width="5%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Guest</td>
+                                        <td>02/14/2018</td>
+                                        <td>02/14/2018</td>
+                                        <td>
+                                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#roomDetailModal">Details</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="col-sm-6">
+            <fieldset class="group-border">
+                <legend class="group-border">Update</legend>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="update-check-in-date">Check-In Date</label>
+                            <div class="input-group date" data-provide="datepicker">
+                                <input type="text" id="update-check-in-date" class="form-control">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="update-check-out-date">Check-Out Date</label>
+                            <div class="input-group date" data-provide="datepicker">
+                                <input type="text" id="update-check-out-date" class="form-control">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="update-guest-name">Guest Name</label>
+                            <input class="form-control" id="update-guest-name" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="update-no-of-guest">No. of Guest</label>
+                            <select id="update-no-of-guest" class="form-control">
+                                @*todo load all types*@
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="update-number-days">No. of Days</label>
+                            <input class="form-control" id="update-number-days" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="update-notes">Notes</label>
+                            <textarea class="form-control" rows="5" id="update-notes"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group" id="update-booking" align="right">
+                            <button type="button" class="btn btn-primary">Update</button>
+                            <button type="button" class="btn btn-primary">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="roomDetailModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Room Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <img src="../../Content/images/room1.jpg" alt="Deluxe" class="img-rounded">
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <label class="form-control" id="modal-room-name"></label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Capacity</label>
+                                        <label class="form-control" id="modal-room-capacity"></label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Rate</label>
+                                        <label class="form-control" id="modal-room-rate"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>Notes</label>
+                                        <textarea class="form-control" rows="5" id="modal-manage-notes"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+

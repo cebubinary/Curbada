@@ -1,0 +1,246 @@
+﻿
+@{
+    ViewBag.Title = "Reservation";
+}
+
+@section scripts{
+    <script>
+        $(function() {
+            $('#div-room-picture').on('click',
+                function() {
+                    BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_INFO,
+                        title: 'Image Preview',
+                        message: function() {
+                            var $message = $('<img></img>').attr({
+                                src: $(this).find('img').attr('src'),
+                                width: "100%",
+                                height: "264px"
+                            });
+                            return $message;
+                        },
+                        buttons: [
+                            {
+                                label: 'Close',
+                                action: function(dialogItself) {
+                                    dialogItself.close();
+                                }
+                            }
+                        ]
+                    });
+                });
+        });
+
+        $('#div-search').click(function() {
+            $.ajax({
+                type: "GET",
+                contenttype: 'json',
+                url: '/Reservation/Search',
+                data: {
+                    "RoomName": $('#room-type').val(),
+                    "NoOfGuest": $('#no-of-guest').val(),
+                    "CheckInDate": $('#check-in-date').val(),
+                    "CheckOutDate": $('#check-out-date').val(),
+                    "Rate": $('#rate').val()
+                },
+                success: successSearch,
+                error: function() {
+
+                }
+            });
+        });
+
+        var successSearch = function(response) {
+            var tableBody = $('#table-tbody');
+            tableBody.find("tr").remove();
+            if (response.IsSuccess) {
+                var data = JSON.parse(response.Data);
+                $.each(data,
+                    function(index, row) {
+                        if (data.hasOwnProperty(index)) {
+                            var tr = $('<tr />');
+                            tr.append($('<td>' + row.Name + '</td>'));
+                            tr.append($('<td>' + row.Capacity + '</td>'));
+                            tr.append($('<td>' + row.Rate + '</td>'));
+                            tableBody.append(tr);
+                        }
+                    });
+            } else {
+                var trEmpty = $('<tr/>');
+                var tdEmpty = $('<td colspan="3"/>');
+                var divEmpty = $('<div class="text-center"/>');
+                var spanEmpty = $('<span class="label label-danger" />').html('No rooms available');
+                tableBody.append(trEmpty.append(tdEmpty.append(divEmpty.append(spanEmpty))));
+            }
+        }
+
+        $('#div-book').click(function() {
+            $.ajax({
+                type: "POST",
+                contenttype: 'json',
+                url: '/Reservation/Book',
+                data: {
+                    "NoOfGuest": $('#manage-no-of-guest').val(),
+                    "CheckInDate": $('#manage-check-in-date').val(),
+                    "CheckOutDate": $('#manage-check-out-date').val(),
+                    "Rate": $('#rate').val(),
+                    "GuestName": $('#guest-name').val(),
+                    "ContactNumber": $('#contact-number').val(),
+                    "Notes": $('#manage-notes').val()
+                },
+                success: function(data) {},
+                error: function() {
+
+                }
+            });
+        });
+</script>
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-4">
+            <fieldset class="group-border">
+                <legend class="group-border">Availability</legend>
+
+                <div class="form-group">
+                    <label for="room-type">Name</label>
+                    <select id="room-type" class="form-control">
+                        @*todo load all types*@
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="no-of-guest">No. of Guest</label>
+                    <select id="no-of-guest" class="form-control">
+                        @*todo load all count guest*@
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="check-in-date">Check-In Date</label>
+                    <div class="input-group date" data-provide="datepicker">
+                        <input type="text" id="check-in-date" class="form-control">
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="check-out-date">Check-Out Date</label>
+                    <div class="input-group date" data-provide="datepicker">
+                        <input type="text" id="check-out-date" class="form-control">
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="rate">Rate</label>
+                    <input class="form-control" id="rate" />
+                </div>
+
+                <div class="form-group" id="div-search" align="right">
+                    <button type="button" class="btn btn-primary">Search</button>
+                </div>
+                
+                <div id="div-result" class="form-group">
+                    <table id="table-result" class="table table-hover table-striped table-responsive">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Capacity</th>
+                            <th>Rate</th>
+                        </tr>
+                        </thead>
+                        <tbody id="table-tbody"/>
+                    </table>
+                </div>
+            </fieldset>
+        </div>
+        <div class="col-sm-6 col-md-4">
+            <fieldset class="group-border">
+                <legend class="group-border">Manage Booking</legend>
+
+                <div class="form-group">
+                    <label>Name</label>
+                    <input class="form-control" id="manage-room-name" disabled="disabled" />
+                </div>
+
+                <div class="form-group">
+                    <label for="manage-no-of-guest">No. of Guest</label>
+                    <select id="manage-no-of-guest" class="form-control">
+                        @*todo load all count guest*@
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="manage-check-in-date">Check-In Date</label>
+                    <div class="input-group date" data-provide="datepicker">
+                        <input type="text" id="manage-check-in-date" class="form-control">
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="manage-check-out-date">Check-Out Date</label>
+                    <div class="input-group date" data-provide="datepicker">
+                        <input type="text" id="manage-check-out-date" class="form-control">
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="guest-name">Guest Name</label>
+                    <input class="form-control" id="guest-name" />
+                </div>
+
+                <div class="form-group">
+                    <label for="contact-number">Contact Number</label>
+                    <input class="form-control" id="contact-number" />
+                </div>
+
+                <div id="div-manage-notes" class="form-group">
+                    <label for="manage-notes">Notes</label>
+                    <textarea class="form-control" rows="5" id="manage-notes"></textarea>
+                </div>
+
+                <div id="div-book" class="form-group" align="right">
+                    <button type="button" class="btn btn-primary">Book</button>
+                </div>
+
+            </fieldset>
+        </div>
+        <div class="col-sm-6 col-md-4">
+            <fieldset class="group-border">
+                <legend class="group-border">Room Details</legend>
+
+                <div class="form-group">
+                    <div class="form-group">
+                        <h4>
+                            <label style="font-size: 15px; font-weight: bold;">Rate </label>
+                            <span id="room-name" class="label label-info">2500</span>
+                        </h4>
+                    </div>
+                </div>
+
+                <div id="div-room-notes" class="form-group">
+                    <label for="room-notes">Notes</label>
+                    <textarea class="form-control" rows="5" id="room-notes" readonly></textarea>
+                </div>
+
+                <div id="div-room-picture" class="form-group">
+                    <img src="../../Content/images/room1.jpg" alt="Deluxe" class="img-responsive">
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>
+
+
